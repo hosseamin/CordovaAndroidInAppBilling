@@ -54,8 +54,8 @@ public class InAppBillingPlugin extends CordovaPlugin {
             // Action selector
             if ("init".equals(action)) {
                 final List<String> sku = new ArrayList<String>();
-                if(data.length() > 0){
-                    JSONArray jsonSkuList = new JSONArray(data.getString(0));
+                if(data.length() > 3){
+                    JSONArray jsonSkuList = new JSONArray(data.getString(3));
                     int len = jsonSkuList.length();
                     Log.d(TAG, "Num SKUs Found: "+len);
                  for (int i=0;i<len;i++){
@@ -63,8 +63,14 @@ public class InAppBillingPlugin extends CordovaPlugin {
                         Log.d(TAG, "Product SKU Added: "+jsonSkuList.get(i).toString());
                  }
                 }
+                String packageName = "";
+                String intentName = "";
+                String billingKey = "";
+                if(data.length() > 0)packageName = data.getString(0);
+                if(data.length() > 1)intentName = data.getString(1);
+                if(data.length() > 2)billingKey = data.getString(2);
                 // Initialize
-                init(sku, callbackContext);
+                init(data.getString(0), data.getString(1), data.getString(2), sku, callbackContext);
                 return true;
             } else if ("isPurchaseOpen".equals(action)) {
                 if (activityOpen == true) {
@@ -99,29 +105,20 @@ public class InAppBillingPlugin extends CordovaPlugin {
         activityOpen = false;
     }
 
-    private String getPublicKey() {
-        int billingKeyFromParam = cordova.getActivity().getResources().getIdentifier("billing_key_param", "string", cordova.getActivity().getPackageName());
-
-        if(billingKeyFromParam > 0) {
-            return cordova.getActivity().getString(billingKeyFromParam);
-        }
-
-        int billingKey = cordova.getActivity().getResources().getIdentifier("billing_key", "string", cordova.getActivity().getPackageName());
-        return cordova.getActivity().getString(billingKey);
-    }
-
 	// Initialize the plugin
-	private void init(final List<String> skus, final CallbackContext callbackContext){
+	private void init(String packageName, String intentName, String base64EncodedPublicKey, final List<String> skus, final CallbackContext callbackContext){
 		Log.d(TAG, "init start");
 
-        String base64EncodedPublicKey = getPublicKey();
-
+		if (packageName.isEmpty())
+	 		throw new RuntimeException("Please send your package name in init action. See README.");
+	 	if (intentName.isEmpty())
+    	 		throw new RuntimeException("Please send your intent name in init action. See README.");
 	 	if (base64EncodedPublicKey.isEmpty())
-	 		throw new RuntimeException("Please install the plugin supplying your Android license key. See README.");
+	 		throw new RuntimeException("Please send your billing key in init action. See README.");
 
 	 	// Create the helper, passing it our context and the public key to verify signatures with
         Log.d(TAG, "Creating IAB helper.");
-        mHelper = new IabHelper(cordova.getActivity().getApplicationContext(), base64EncodedPublicKey);
+        mHelper = new IabHelper(cordova.getActivity().getApplicationContext(), packageName, intentName, base64EncodedPublicKey);
 
         // enable debug logging (for a production application, you should set this to false).
         mHelper.enableDebugLogging(ENABLE_DEBUG_LOGGING);

@@ -21,3 +21,6 @@ local.properties
 
 #UE Backup Files
 *.bak
+
+#JetBrains IDE Files
+.idea

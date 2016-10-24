@@ -1,5 +1,5 @@
-In app billing documentation
-===================================
+Cordova Android In app billing documentation
+============================================
 Requirements
 -------------
 Phonegap 3.0, Android 2.2.1+
@@ -8,71 +8,32 @@ Phonegap 3.0, Android 2.2.1+
 Google Play client version 3.9.16  
 * Purchasing and querying subscription items:  
 Google Play client version 3.10.10 or higher
+* Purchasing and querying subscription items:  
+Any Android market that implemented like Google Play (Cafebazaar.ir and Myket.ir for Examples)
+
 
 Support
 ---------------------
 For free community support, please use the issue tracker.  
-To get professional non-free support for the plugin, please contact me at gcharhon(at)smartmobilesoftware.com.
+To get professional non-free support for the plugin, please contact me at m.reza.maghool(at)gmail.com.
 
 If you find this plugin useful, please donate via BitCoin to support it:  
-17JK27E4vbzPrJbBAtvjUVN3LrFcATtRA1
+1P5eEjhSUAqa5TEym3aBrk77XH9AbxhBGw
 
 Installation
 -------------
 
 * Get acquainted with the Android [In-app Billing documentation](http://developer.android.com/google/play/billing/index.html).
+* Or Get acquainted with the Cafebazaar [In-app Billing documentation](https://cafebazaar.ir/developers/docs/?l=en).
+* Or Get acquainted with the Myket [In-app Billing documentation](https://kb.myket.ir/).
 
 ### Automatic
 
 We recommend this way to install the plugin into your project.
 
-1. Clone this project into your repository
-2. Run at the root of your project:  
-```
-    cordova plugin add /path/to/your/cloned/plugin/AndroidInAppBilling --variable BILLING_KEY="MIIBIjANBgk...AQAB"
-```  
-or  
-```
-    phonegap local plugin add /path/to/your/cloned/plugin/AndroidInAppBilling --variable BILLING_KEY="MIIBIjANBgk...AQAB"
-```
+For Cordova CLI - cordova plugin add cordova-plugin-android-iap
 
-### Manually
-
-The manual steps are not working on Phonegap 3.1+. Theses steps are not maintained anymore. Check the [issue #32](_https://github.com/poiuytrez/AndroidInAppBilling/issues/32) for more info. 
-
-* Add in your `src` folder the `src/android/com` folder  
-It contains:
-    * [Google Play In-app Billing library]( http://developer.android.com/guide/google/play/billing/billing_overview.html)
-	* Phonegap InAppBillingPlugin
-* Create a `plugins` folder in your project's `www` folder if it does not exist.
-* Create a `com.smartmobilesoftware.inappbilling` folder inside the `plugins` folder.
-* Copy `www/inappbilling.js` into `<path to project>/www/plugins/com.smartmobilesoftware.inappbilling/www`
-* In res/xml/config.xml, add  
-
-```xml  
-<feature name="InAppBillingPlugin">   
-      <param name="android-package" value="com.smartmobilesoftware.inappbilling.InAppBillingPlugin"/>  
-</feature>  
-```
-* Open the AndroidManifest.xml of your application
-	* add this permission  
-`<uses-permission android:name="com.android.vending.BILLING" />`
-* Create a new file named `Phonegap_plugins.js` in the `<path to project>/www` folder if it does not exist.
-* Edit `Phonegap_plugins.js` and add a reference to the plugin to automatically load it:
-
-```javascript
-    Phonegap.define('Phonegap/plugin_list', function(require, exports, module) {
-    module.exports = [
-        {
-            "file": "plugins/com.smartmobilesoftware.inappbilling/www/inappbilling.js",
-            "id": "com.smartmobilesoftware.inappbilling.InAppBillingPlugin",
-            "clobbers": [
-                "inappbilling"
-	    ]
-    	}
-    ]
-    });
-```
+For PhoneGap Build - Add <gap:plugin name="cordova-plugin-android-iap" version="1.0.0" /> to config.xml
 
 ### Finish setting up your app
 * Create a release apk of your app and sign it.
@@ -81,14 +42,6 @@ It contains:
 * Enter the app description, logo, etc. then click on save
 * Add in-app purchases items from the Developer Console (activate them but do not publish the app)
 * Click on Services and APIs to get your public license key
-* For PhoneGap build, configure the plugin with a parameter in your `config.xml` file
-
-```xml
-<gap:plugin name="com.smartmobilesoftware.inappbilling">
-    <param name="BILLING_KEY" value="MIIBIjANBgk...AQAB" />
-</gap:plugin>
-```
-
 * Wait 6-8 hours
 * Install the signed app on your test device in release mode. The Google Account on the test device should not be the same as the developer account).
 * Read carefully the Google testing guide to learn how to test your app : http://developer.android.com/guide/google/play/billing/billing_testing.html
@@ -98,20 +51,46 @@ Usage
 #### Initialization
 Initialize the billing plugin. The plugin must be inialized before calling any other methods. 
 
-    inappbilling.init(success, error, options)
+    inappbilling.init(success, error, options, packageName, intentName, billingKey)
 parameters
 * success : The success callback.
 * error : The error callback.
+* packageName : this is the package name of your target market
+	* Available Options :
+		* com.android.vending : the default Google Play market
+		* com.farsitel.bazaar : for Cafebazaar.ir market
+		* ir.mservices.market : for Myket.ir market
+		* etc : or any android market that you want
+* intentName : this is the intent name of your target market
+	* Available Options :
+		* com.android.vending.billing.InAppBillingService.BIND : the default Google Play market
+		* ir.cafebazaar.pardakht.InAppBillingService.BIND : for Cafebazaar.ir market
+		* ir.mservices.market.InAppBillingService.BIND : for Myket.ir market
+		* etc : or any android market that you want
+* billingKey : the billing key for your service
 * options : Sets the options for the plugin
 	* Available Options :
 		* showLog [true,false] : showLog enables plugin JS debug messages. Default : true
 
 #### Optional Initialization
 
-    inappbilling.init(success, error, options, skus)
+    inappbilling.init(success, error, options, packageName, intentName, billingKey, skus)
 parameters
 * success : The success callback.
 * error : The error callback.
+* packageName : this is the package name of your target market
+	* Available Options :
+		* com.android.vending : the default Google Play market
+		* com.farsitel.bazaar : for Cafebazaar.ir market
+		* ir.mservices.market : for Myket.ir market
+		* etc : or any android market that you want
+* intentName : this is the intent name of your target market
+	* Available Options :
+		* com.android.vending.billing.InAppBillingService.BIND : the default Google Play market
+		* ir.cafebazaar.pardakht.InAppBillingService.BIND : for Cafebazaar.ir market
+		* ir.mservices.market.InAppBillingService.BIND : for Myket.ir market
+		* etc : or any android market that you want
+* billingKey : the billing key for your service
 * options : Sets the options for the plugin
 	* Available Options :
 		* showLog [true,false] : showLog enables plugin JS debug messages. Default : true
@@ -213,7 +192,7 @@ The list of the available product(s) in inventory.
 
 * error : The error callback.
 
-#### Check if the Play Store purchase view is open
+#### Check if the Market Store purchase view is open
 
 		inappbilling.isPurchaseOpen(success)
 * success : The success callback. It provides a boolean
@@ -222,7 +201,7 @@ The list of the available product(s) in inventory.
 Quick example
 ---------------
 ```javascript
-inappbilling.init(successInit,errorCallback, {showLog:true})
+inappbilling.init(successInit,errorCallback, {showLog:true}, "com.android.vending", "com.android.vending.billing.InAppBillingService.BIND", "MIIBIjANBgk...AQAB")
 
 function successInit(result) {    
 	// display the extracted text   
@@ -267,7 +246,7 @@ Full example
             // Click on init button
 			function init(){
 				// Initialize the billing plugin
-				inappbilling.init(successHandler, errorHandler, {showLog:true});
+				inappbilling.init(successHandler, errorHandler, {showLog:true}, "com.android.vending", "com.android.vending.billing.InAppBillingService.BIND", "MIIBIjANBgk...AQAB");
 			}
 
 			// Click on purchase button
@@ -346,8 +325,9 @@ If any of these questions is answered with a "no", you probably need to fix that
 
 
 MIT License
-----------------
+-----------
 
+Copyright (c) 2016 Mohammad Reza Maghoul - Javaneh Pooya Co
 Copyright (c) 2012-2014 Guillaume Charhon - Smart Mobile Software
 
  Permission is hereby granted, free of charge, to any person obtaining a copy

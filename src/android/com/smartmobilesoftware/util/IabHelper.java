@@ -99,6 +99,12 @@ public class IabHelper {
     // Public key for verifying signature, in base64 encoding
     String mSignatureBase64 = null;
 
+    // Package Name of target market
+    String mPackageName = null;
+
+    // Intent Name of target market
+    String mIntentName = null;
+
     // Billing response codes
     public static final int BILLING_RESPONSE_RESULT_OK = 0;
     public static final int BILLING_RESPONSE_RESULT_USER_CANCELED = 1;
@@ -152,9 +158,11 @@ public class IabHelper {
      *     public key in your application's page on Google Play Developer Console. Note that this
      *     is NOT your "developer public key".
      */
-    public IabHelper(Context ctx, String base64PublicKey) {
+    public IabHelper(Context ctx, String packageName, String intentName, String base64PublicKey) {
         mContext = ctx.getApplicationContext();
         mSignatureBase64 = base64PublicKey;
+        mPackageName = packageName;
+        mIntentName = intentName;
         logDebug("IAB helper created.");
     }
 
@@ -254,8 +262,8 @@ public class IabHelper {
             }
         };
 
-        Intent serviceIntent = new Intent("com.android.vending.billing.InAppBillingService.BIND");
-        serviceIntent.setPackage("com.android.vending");
+        Intent serviceIntent = new Intent(mIntentName);
+        serviceIntent.setPackage(mPackageName);
         List service = mContext.getPackageManager().queryIntentServices(serviceIntent, 0);
         if (service != null && !service.isEmpty()) {
             // service available to handle that Intent
