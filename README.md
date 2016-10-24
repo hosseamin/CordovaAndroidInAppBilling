@@ -33,7 +33,7 @@ We recommend this way to install the plugin into your project.
 
 For Cordova CLI - cordova plugin add cordova-plugin-android-iap
 
-For PhoneGap Build - Add <gap:plugin name="cordova-plugin-android-iap" version="1.0.0" /> to config.xml
+For PhoneGap Build - Add `<gap:plugin name="cordova-plugin-android-iap" version="1.0.0" />` to config.xml
 
 ### Finish setting up your app
 * Create a release apk of your app and sign it.
@@ -44,11 +44,11 @@ For PhoneGap Build - Add <gap:plugin name="cordova-plugin-android-iap" version="
 * Click on Services and APIs to get your public license key
 * Don't forgot to add payment permissions to your AndroidManifest.xml. these are examples:
 
-    Google Play: <uses-permission android:name="com.android.vending.BILLING" />
+    Google Play: `<uses-permission android:name="com.android.vending.BILLING" />`
 
-    Cafebazaar: <uses-permission android:name="com.farsitel.bazaar.permission.PAY_THROUGH_BAZAAR" />
+    Cafebazaar: `<uses-permission android:name="com.farsitel.bazaar.permission.PAY_THROUGH_BAZAAR" />`
 
-    Myket: <uses-permission android:name="ir.mservices.market.BILLING" />
+    Myket: `<uses-permission android:name="ir.mservices.market.BILLING" />`
 
 * Wait 6-8 hours
 * Install the signed app on your test device in release mode. The Google Account on the test device should not be the same as the developer account).
