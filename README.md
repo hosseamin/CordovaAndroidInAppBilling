@@ -31,9 +31,9 @@ Installation
 
 We recommend this way to install the plugin into your project.
 
-For Cordova CLI - cordova plugin add cordova-plugin-android-iap
+For Cordova CLI - cordova plugin add cordova-plugin-android-iab
 
-For PhoneGap Build - Add `<gap:plugin name="cordova-plugin-android-iap" version="1.0.0" />` to config.xml
+For PhoneGap Build - Add `<gap:plugin name="cordova-plugin-android-iab" version="1.0.0" />` to config.xml
 
 ### Finish setting up your app
 * Create a release apk of your app and sign it.
