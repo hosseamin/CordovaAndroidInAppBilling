@@ -1,7 +1,7 @@
 {
   "name": "cordova-plugin-android-iap",
-  "version": "1.0.0",
-  "description": "Use this In-app Billing plugin to sell digital goods, including one-time items and recurring subscriptions from your Cordova application.\n        Main repo with full documentation located at: https://github.com/IVIR3zaM/CordovaAndroidInAppBilling\n        This plugin is a forked (and maintained for multiple market) version of: https://github.com/poiuytrez/AndroidInAppBilling",
+  "version": "1.0.1",
+  "description": "Use this In-app Billing plugin to sell digital goods, including one-time items and recurring subscriptions from your Cordova application.\n        Main repo with full documentation located at: https://github.com/IVIR3zaM/CordovaAndroidInAppBilling\n        This plugin is a forked (and maintained for multiple markets) version of: https://github.com/poiuytrez/AndroidInAppBilling",
   "cordova": {
     "id": "cordova-plugin-android-iap",
     "platforms": [
